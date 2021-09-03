@@ -1,10 +1,12 @@
-export default function PostList({ $target, initialState, onPostClick }) {
-    
+export default function PostList({ 
+    $target, 
+    initialState, 
+    onPostClick 
+}) {    
     const $postList = document.createElement('div')
     $target.appendChild($postList)
 
     this.state = initialState
-
     this.setState = nextState => {
         this.state = nextState
         this.render()
@@ -13,11 +15,11 @@ export default function PostList({ $target, initialState, onPostClick }) {
         $postList.innerHTML = `
             <ul>
                 ${this.state.map(post => `
-                    <li data-id="${post.id}">${post.title}</li>
+                    <li data-id="${post.id}">${post.title}</li> 
                 `).join('')}
             </ul>
         `
-
     }
     this.render()
+    // post.id, post.title은 initialState에서 넘겨받는다.
 }
