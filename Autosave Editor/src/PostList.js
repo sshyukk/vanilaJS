@@ -1,7 +1,9 @@
+import { push } from "./router.js"
+
 export default function PostList({ 
     $target, 
     initialState, 
-    onPostClick 
+     
 }) {    
     const $postList = document.createElement('div')
     $target.appendChild($postList)
@@ -22,4 +24,13 @@ export default function PostList({
     }
     this.render()
     // post.id, post.title은 initialState에서 넘겨받는다.
+
+    $postList.addEventListener('click', (e) => {
+        const $li = e.target.closest('li')
+
+        if ($li) {
+            const { id } = $li.dataset
+            push(`/posts/${id}`)
+        }
+    } )
 }

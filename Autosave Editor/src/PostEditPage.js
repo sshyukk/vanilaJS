@@ -1,6 +1,7 @@
 // 여기서 초기값은 편집할 id값을 넘겨받는다. 어느 페이지를 편집하고 있는지 알아보기 위함!
 import { request } from './api.js'
 import Editor from './Editor.js'
+import LinkButton from './LinkButton.js'
 import { getItem, removeItem, setItem } from './storage.js'
 
 export default function PostEditPage({ $target, initialState }) {
@@ -38,6 +39,8 @@ export default function PostEditPage({ $target, initialState }) {
                     // 저장시간 측정.
                     tempSaveDate: new Date()
                 })
+
+
                 const isNew = this.state.postId === 'new'
                 if (isNew) {
                     const createdPost = await request('/posts', {
@@ -46,6 +49,11 @@ export default function PostEditPage({ $target, initialState }) {
                     })
                     history.replaceState(null, null, `/posts/${createdPost.id}`)
                     removeItem(postLocalSaveKey)
+
+                    this.setState({
+                        postId: createdPost.id,
+                        
+                    })
                 } else {
                     await request(`/posts/${post.id}`, {
                         method: 'PUT',
@@ -60,10 +68,19 @@ export default function PostEditPage({ $target, initialState }) {
 
     this.setState = async nextState => {
         if (this.state.postId !== nextState.postId) {
-            postLocalSaveKey = 'temp-post-${nextState.postId}'
-
+            postLocalSaveKey = `temp-post-${nextState.postId}`
             this.state = nextState
-            await fetchPost()
+
+            if(this.state.postId === 'new') {
+                const post = getItem(postLocalSaveKey, {
+                    title: '',
+                    content: ''
+                })
+                this.render()
+                editor.setState(post)
+            } else {
+                await fetchPost()
+            }
             return 
         }
 
@@ -110,4 +127,12 @@ export default function PostEditPage({ $target, initialState }) {
             })
         }
     }
+
+    new LinkButton({
+        $target: $postEditPage,
+        initialState: {
+            text: '목록으로 이동',
+            link: '/' 
+        }
+    })
 }
