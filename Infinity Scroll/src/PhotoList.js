@@ -6,7 +6,6 @@ initialState = [
     }
 ]
 */
-
 export default function PhotoList({ $target, initialState, onScrollEnded }) {
     const $photoList = document.createElement('ul')
     $target.appendChild($photoList)
