@@ -47,4 +47,12 @@ export default function PhotoList({ $target, initialState, onScrollEnded }) {
             onScrollEnded()
         }
     })
+    // 스크롤 기능 구현
+    window.addEventListener('scroll', () => {
+        const isScrollEnded = (window.innerHeight + window.scrollY) + 100 >= document.body.offsetHeight
+        if (isScrollEnded && !this.state.isLoading) {
+            onScrollEnded()
+        }
+    })
 }
+
