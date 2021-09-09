@@ -49,8 +49,9 @@ export default function PhotoList({ $target, initialState, onScrollEnded }) {
     })
     // 스크롤 기능 구현
     window.addEventListener('scroll', () => {
+        const { isLoading, totalCount, photos } = this.state
         const isScrollEnded = (window.innerHeight + window.scrollY) + 100 >= document.body.offsetHeight
-        if (isScrollEnded && !this.state.isLoading) {
+        if (isScrollEnded && !isLoading && photos.length < totalCount ) {
             onScrollEnded()
         }
     })

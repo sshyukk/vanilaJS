@@ -13,6 +13,7 @@ export default function App({ $target }) {
         limit: 5,
         nextStart: 0, // limit 갯수만큼 계속 더해짐
         photos: [],
+        totalCount: 0,
         isLoading: false
     }
     // 고양이 사진 리스트 생성
@@ -20,7 +21,8 @@ export default function App({ $target }) {
         $target,
         initialState: {
             isLoading: this.state.isLoading,
-            photos: this.state.photos
+            photos: this.state.photos,
+            totalCount: this.state.totalCount
         },
         onScrollEnded: async () => {
             await fetchPhotos()
@@ -31,7 +33,8 @@ export default function App({ $target }) {
         this.state = nextState
         photoListComponent.setState({
             isLoading: this.state.isLoading,
-            photos: nextState.photos
+            photos: nextState.photos,
+            totalCount: this.state.totalCount
         })
     }
     // 사진 api 불러오기
@@ -49,5 +52,14 @@ export default function App({ $target }) {
             isLoading: false,
         })
     }
-    fetchPhotos()
+
+    const initialize = async () => {
+        const totalCount = await request('/cat-photos/count')
+        this.setState({
+            ...this.state,
+            totalCount
+        })
+        await fetchPhotos()
+    }
+    initialize()
 }
