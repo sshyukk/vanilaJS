@@ -16,6 +16,21 @@ export default function PhotoList({ $target, initialState, onScrollEnded }) {
         this.state = nextState
         this.render()
     }
+    // intersection observer 객체 생성
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting && !this.state.isLoading) {
+                console.log('화면 끝!!', entry)
+                if (this.state.totalCount > this.state.photos.length) {
+                    onScrollEnded()
+                }
+            }
+        })
+    }, {
+        root: null,
+        threshold: 1,
+    })
+    let $lastLi = null
     //렌더링
     this.render = () => {
         // 렌더링 리스트 생성 중복 방지
@@ -34,13 +49,23 @@ export default function PhotoList({ $target, initialState, onScrollEnded }) {
                 // 없으면 li 생성하고 $photos에 appendChild
                 const $li = document.createElement('li')
                 $li.setAttribute('data-id', photo.id)
-                $li.style = 'list-style: none;'
+                $li.style = 'list-style: none; min-height: 500px;'
                 $li.innerHTML = `<img width="100%" src="${photo.imagePath}" />`
                 $photos.appendChild($li)
             }
         })
+        // intersection observer 감시 대상 설정
+        const $nextLi = $photos.querySelector('li:last-child')
+        if ( $nextLi !== null) {
+            if ($lastLi !== null) {
+                observer.unobserve($lastLi)
+            }
+            $lastLi = $nextLi
+            observer.observe($lastLi)
+        }
     }
     this.render()
+
     // 사진 불러오기 버튼 생성
     $photoList.addEventListener('click', e => {
         if (e.target.className === 'PhotoList__loadMore' && !this.state.isLoading) {
