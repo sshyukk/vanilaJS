@@ -1,18 +1,19 @@
 export default function Nodes({ $target, initialState, onClick }) {
-    // 초기 세팅
+    // 영역 값 설정
     const $nodes = document.createElement('div')
-    $target.appendChild($nodes)
     $nodes.classList.add('Nodes')
+    $target.appendChild($nodes)
+
+    // 초기 값 설정
     this.state = initialState
-    // 초기 값 세팅
     this.setState = nextState => {
         this.state = nextState
         this.render()
     }
-    // 렌더링
+    // 렌더링 과정
     this.render = () => {
         const { isRoot, nodes } = this.state
-
+        // 뒤로가기 버튼 생성 & 디렉토리와 파일 아이콘 구분
         $nodes.innerHTML = `
             ${isRoot ? '' : `
                 <div class="Node">
