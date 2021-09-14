@@ -28,4 +28,10 @@ export default function ImageViewer({ $target, onClose }) {
             onClose()
         }
     })
+    // 모달 click 이벤트 처리. 닫기 기능 추가.
+    $imageViewer.addEventListener('click', (e) => {
+        if (Array.from(e.target.classList).includes('Modal')) {
+            onClose()
+        }
+    })
 }
