@@ -1,6 +1,8 @@
 import { request } from './api.js'
 import Nodes from './Nodes.js'
 import ImageViewer from './ImageViewer.js'
+import Loading from './Loading.js'
+import Breadcrumb from './Breadcrumb.js'
 // DUMMY DATA 1,2 임의로 설정
 const DUMMY_DATA = [{"id":"1","name":"노란고양이","type":"DIRECTORY","filePath":null,"parent":null},{"id":"3","name":"까만고양이","type":"DIRECTORY","filePath":null,"parent":null},{"id":"10","name":"고등어무늬 고양이","type":"DIRECTORY","filePath":null,"parent":null},{"id":"13","name":"삼색이 고양이","type":"DIRECTORY","filePath":null,"parent":null},{"id":"14","name":"회색고양이","type":"DIRECTORY","filePath":null,"parent":null},{"id":"20","name":"하얀고양이","type":"DIRECTORY","filePath":null,"parent":null}]
 const DUMMY_DATA_2 = [{"id":"5","name":"2021/04","type":"DIRECTORY","filePath":null,"parent":{"id":"1"}},{"id":"19","name":"물 마시는 사진","type":"FILE","filePath":"/images/a2i.jpg","parent":{"id":"1"}}]
@@ -8,6 +10,7 @@ const DUMMY_DATA_2 = [{"id":"5","name":"2021/04","type":"DIRECTORY","filePath":n
 export default function App({ $target }) {
     this.state = {
         isRoot: true,
+        isLoading: false,
         nodes: [],
         paths: [],
     }
@@ -21,7 +24,14 @@ export default function App({ $target }) {
         imageViewer.setState({
             selectedImageUrl: this.state.selectedImageUrl
         })
+        loading.setState(this.state.isLoading)
+        breadcrumb.setState(this.state.paths)
     }
+    // Breadcrumb Component 생성
+    const breadcrumb = new Breadcrumb({
+        $target,
+        initialState: this.state.paths,
+    })
     // Nodes Component 생성
     const nodes = new Nodes({
         $target,
@@ -71,13 +81,22 @@ export default function App({ $target }) {
             })
         },
     })
+    // Loading Component 생성
+    const loading = new Loading({
+        $target
+    })
     // api 호출하기
     const fetchNodes = async (id) => {
+        this.setState({
+            ...this.state,
+            isLoading: true,
+        })
         const nodes = await request(id ? `/${id}` : '/')
         this.setState({
             ...this.state,
             isRoot: id ? false : true,
-            nodes
+            isLoading: false,
+            nodes,
         })
     }
     fetchNodes()
