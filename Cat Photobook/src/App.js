@@ -25,7 +25,9 @@ export default function App({ $target }) {
             nodes: this.state.nodes,
         },
         onClick: async (node) => {
-            await fetchNodes(node.id)
+            if (node.type === 'DIRECTORY') {
+                await fetchNodes(node.id)
+            }
         }
     })
     // api 호출하기
