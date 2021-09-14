@@ -21,7 +21,7 @@ export default function Nodes({ $target, initialState, onClick }) {
                 </div>
             `}
             ${nodes.map(node => `
-                <div class="Node">
+                <div class="Node" data-id="${node.id}">
                     <img src="${node.type === 'DIRECTORY' ?
                         "https://cdn.roto.codes/images/directory.png" :
                         "https://cdn.roto.codes/images/file.png"
@@ -32,4 +32,20 @@ export default function Nodes({ $target, initialState, onClick }) {
         `
     }
     this.render()
+    // 클릭 이벤트 구현. 클릭 시 노드에 해당하는 아이디 추출.
+    $nodes.addEventListener('click', e => {
+        const $node = e.target.closest('.Node')
+        const { id } = $node.dataset
+        // id가 없는 경우. 뒤로가기 버튼 처리.
+        if (!id) {
+
+        }
+        // id가 있는 경우. 각 노드에 해당하는 클릭 버튼 처리.
+        const node = this.state.nodes.find(node => node.id === id)
+        if (node) {
+            onClick(node)
+        } else {
+            alert('올바르지 않은 Node입니다!')
+        }
+    })
 }
