@@ -31,6 +31,25 @@ export default function App({ $target }) {
     const breadcrumb = new Breadcrumb({
         $target,
         initialState: this.state.paths,
+        onClick: async (id) => {
+            // 클릭한 경로 이외의 breadcrumb의 경로를 제거.
+            if (id) {
+                const nextPaths = [...this.state.paths]
+                const pathIndex = nextPaths.findIndex(path => path.id === id)
+                console.log(nextPaths)
+                console.log(pathIndex)
+                this.setState({
+                    ...this.state,
+                    paths: nextPaths.slice(0, pathIndex + 1)
+                })
+            } else {
+                this.setState({
+                    ...this.state,
+                    paths: []
+                })
+            }
+            await fetchNodes(id)
+        }
     })
     // Nodes Component 생성
     const nodes = new Nodes({
