@@ -3,7 +3,6 @@ export default function Nodes({ $target, initialState, onClick }) {
     const $nodes = document.createElement('div')
     $nodes.classList.add('Nodes')
     $target.appendChild($nodes)
-
     // 초기 값 설정
     this.state = initialState
     this.setState = nextState => {

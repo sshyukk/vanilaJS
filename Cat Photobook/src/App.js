@@ -43,7 +43,13 @@ export default function App({ $target }) {
     })
     // ImageViewer Component 생성
     const imageViewer = new ImageViewer({
-        $target
+        $target,
+        onClose: () => {
+            this.setState({
+                ...this.state,
+                selectedImageUrl: null,
+            })
+        },
     })
     // api 호출하기
     const fetchNodes = async (id) => {

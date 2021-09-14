@@ -1,4 +1,4 @@
-export default function ImageViewer({ $target }) {
+export default function ImageViewer({ $target, onClose }) {
     // 영역 값 설정
     const $imageViewer = document.createElement('div')
     $imageViewer.className = 'ImageViewer Modal'
@@ -21,4 +21,11 @@ export default function ImageViewer({ $target }) {
         `
     }
     this.render()
+    // window 닫는 처리
+    window.addEventListener('keyup', (e) => {
+        // Esc 키를 눌렀을 경우 onClose를 호출.
+        if (e.key === 'Escape') {
+            onClose()
+        }
+    })
 }
