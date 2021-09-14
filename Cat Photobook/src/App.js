@@ -8,7 +8,8 @@ const DUMMY_DATA_2 = [{"id":"5","name":"2021/04","type":"DIRECTORY","filePath":n
 export default function App({ $target }) {
     this.state = {
         isRoot: true,
-        nodes: []
+        nodes: [],
+        paths: [],
     }
     // 초기 값 설정
     this.setState = nextState => {
@@ -32,12 +33,31 @@ export default function App({ $target }) {
         onClick: async (node) => {
             if (node.type === 'DIRECTORY') {
                 await fetchNodes(node.id)
+                this.setState({
+                    ...this.state,
+                    paths: [...this.state.paths, node]
+                })
             }
             if (node.type === 'FILE') {
                 this.setState({
                     ...this.state,
                     selectedImageUrl: `https://cat-api.roto.codes/static${node.filePath}`
                 })
+            }
+        },
+        // 뒤로가기 기능 구현
+        onPrevClick: async () => {
+            const nextPaths = [...this.state.paths]
+            nextPaths.pop()
+            this.setState({
+                ...this.state,
+                paths: nextPaths
+            })
+            console.log(nextPaths)
+            if (nextPaths.length === 0) {
+                await fetchNodes()
+            } else {
+                await fetchNodes(nextPaths[nextPaths.length - 1].id)
             }
         }
     })

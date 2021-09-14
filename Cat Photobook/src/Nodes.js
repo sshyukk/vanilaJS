@@ -1,4 +1,4 @@
-export default function Nodes({ $target, initialState, onClick }) {
+export default function Nodes({ $target, initialState, onClick, onPrevClick }) {
     // 영역 값 설정
     const $nodes = document.createElement('div')
     $nodes.classList.add('Nodes')
@@ -44,7 +44,7 @@ export default function Nodes({ $target, initialState, onClick }) {
         if (node) {
             onClick(node)
         } else {
-            alert('올바르지 않은 Node입니다!')
+            onPrevClick()
         }
     })
 }
